@@ -3468,6 +3468,7 @@ function restoreSmithBg(){
 // 鍛冶屋改造カードをDBからリセット（タイトル戻り・クリア時）
 function resetSmithKai(){
   Object.keys(DB).forEach(k=>{if(DB[k]&&DB[k]._smithKai)delete DB[k];});
+  _adsShownIndices = [];
 }
 
 // 鍛冶屋イベント
@@ -5881,6 +5882,8 @@ let _adsList = [
   { "image": "ad7.png", "url": "https://example.com/ad7", "alt": "広告7" },
   { "image": "ad8.png", "url": "https://example.com/ad8", "alt": "広告8" }
 ];
+// 表示済み広告インデックス（ゲーム中重複防止）
+let _adsShownIndices = [];
 function _preloadAdImages(list){
   list.forEach(ad=>{ if(ad.image){ const i=new Image(); i.src=ad.image; } });
 }
@@ -5916,8 +5919,13 @@ function showAdThenContinue(onComplete){
     return;
   }
 
-  // ランダムで1つ選ぶ
-  const ad = _adsList[Math.floor(Math.random() * _adsList.length)];  img.src = ad.image;
+  // 未表示インデックスから選ぶ。全て見たらリセット
+  let remaining = _adsList.map((_,i)=>i).filter(i=>!_adsShownIndices.includes(i));
+  if(remaining.length === 0){ _adsShownIndices = []; remaining = _adsList.map((_,i)=>i); }
+  const pick = remaining[Math.floor(Math.random() * remaining.length)];
+  _adsShownIndices.push(pick);
+  const ad = _adsList[pick];
+  img.src = ad.image;
   img.alt = ad.alt || '';
   link.href = ad.url || '#';
 
@@ -6515,6 +6523,7 @@ function showLogoThenTitle(){
             logoScreen.style.display='flex';
             requestAnimationFrame(()=>requestAnimationFrame(()=>{
               logoScreen.style.opacity='1';
+              _registerStartListeners();
             }));
           },500);
         },2000);
@@ -6522,6 +6531,7 @@ function showLogoThenTitle(){
         logoScreen.style.display='flex';
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
           logoScreen.style.opacity='1';
+          _registerStartListeners();
         }));
       }
     },600);
@@ -6624,22 +6634,32 @@ setTimeout(()=>{
   });
 },300);
 
-logoScreen.addEventListener('click',(e)=>{
-  if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
-  // 中央三分の一以外は無効（tap-start-zone以外からのクリックを弾く）
-  if(!e.target.closest('#tap-start-zone')) return;
-  startGame();
-});
-logoScreen.addEventListener('touchend',e=>{
-  if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
-  if(!e.target.closest('#tap-start-zone')) return;
-  e.preventDefault(); startGame();
-});
+function _registerStartListeners(){
+  function _tl(e){
+    if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
+    if(!e.target.closest('#tap-start-zone')) return;
+    e.preventDefault();
+    logoScreen.removeEventListener('touchend',_tl);
+    logoScreen.removeEventListener('click',_cl);
+    startGame();
+  }
+  function _cl(e){
+    if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
+    if(!e.target.closest('#tap-start-zone')) return;
+    logoScreen.removeEventListener('touchend',_tl);
+    logoScreen.removeEventListener('click',_cl);
+    startGame();
+  }
+  logoScreen.addEventListener('touchend',_tl);
+  logoScreen.addEventListener('click',_cl);
+}
+
+_registerStartListeners();
 // tap-start-zone専用イベント（直接タップ用）
 const tapStartZone=document.getElementById('tap-start-zone');
 if(tapStartZone){
-  tapStartZone.addEventListener('click',e=>{e.stopPropagation();startGame();});
-  tapStartZone.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();startGame();});
+  tapStartZone.addEventListener('click',e=>{e.stopPropagation();},{once:true});
+  tapStartZone.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();},{once:true});
 }
 
 // チャージ選択の戻るボタン（タイトル画面に戻る）
