@@ -709,16 +709,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
           <img id="charge-type-img" style="width:20px;height:20px;object-fit:contain;display:block;" onerror="this.parentNode.style.display='none';document.getElementById('charge-emoji').style.display='block';">
         </div>
         <div id="charge-emoji" style="font-size:14px;line-height:1;display:block;"></div>
-        <div id="charge-name" style="font-family:'Cinzel',serif;font-size:7px;color:#c9a84c;letter-spacing:1px;">CHARGE ▶</div>
+        <div id="charge-name" style="font-family:'Cinzel',serif;font-size:10.5px;font-weight:bold;color:#c9a84c;letter-spacing:1px;">CHARGE ▶</div>
         <div id="gauge-lamps" style="display:flex;gap:3px;"></div>
-        <div id="charge-status-label" style="height:10px;font-size:6px;font-family:'Cinzel',serif;letter-spacing:0.5px;line-height:1;margin-top:1px;text-align:center;"></div>
+        <div id="charge-status-label" style="height:10px;font-size:9px;font-weight:bold;font-family:'Cinzel',serif;letter-spacing:0.5px;line-height:1;margin-top:1px;text-align:center;"></div>
       </div>
       
       <div id="curse-timer-box" style="display:none;position:absolute;bottom:4px;right:4px;background-color:rgba(0,0,0,.88);background-image:url(jyubakubox.png);background-size:70px 60px;background-repeat:no-repeat;background-position:center;border:1.5px solid rgba(180,40,40,.8);border-radius:7px;padding:3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;z-index:10;box-shadow:0 0 8px rgba(200,40,40,.3);cursor:pointer;touch-action:manipulation;width:70px;height:60px;overflow:hidden;" onclick="showCurseInfo()" ontouchend="event.preventDefault();showCurseInfo();">
       <img src="jyubakubox.png" style="display:none;" onerror="document.getElementById('curse-timer-box').style.backgroundImage='none';">
-        <div style="font-family:'Cinzel',serif;font-size:6px;color:#e74c3c;letter-spacing:0.5px;">⏳ 呪縛</div>
+        <div style="font-family:'Cinzel',serif;font-size:9px;font-weight:bold;color:#e74c3c;letter-spacing:0.5px;">⏳ 呪縛</div>
         <div id="curse-timer-count" style="font-family:'Cinzel',serif;font-size:11px;font-weight:bold;color:#fff;line-height:1;">-</div>
-        <div id="curse-timer-dmg" style="font-size:6px;color:#e07878;font-family:sans-serif;"></div>
+        <div id="curse-timer-dmg" style="font-size:9px;font-weight:bold;color:#e07878;font-family:sans-serif;"></div>
         <div style="font-size:6px;color:rgba(231,76,60,.45);">▼</div>
       </div>
     </div><!-- /enemy-area -->
@@ -3054,7 +3054,13 @@ function updateIntent(){
   }
 }
 
+// 敵ターン中・勝利演出中の操作ロックチェック
+function _isGameLocked(){
+  return (typeof G!=='undefined') && (G.phase==='enemy' || G.phase==='block');
+}
+
 function showEnemyIntentDetail(act,detail,ea){
+  if(_isGameLocked())return;
   const text=detail[act]||('不明な行動: '+act);
   const popup=document.createElement('div');
   popup.style.cssText='position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;';
@@ -4532,6 +4538,7 @@ function stopCurseOrbs(){
 
 
 function showStatusDetail(target){
+  if(_isGameLocked())return;
   const lines=[];
   if(target==='enemy'){
     lines.push('【敵の状態】');
@@ -4591,6 +4598,7 @@ function showStatusDetail(target){
 
 
 function showStatupDetail(){
+  if(_isGameLocked())return;
   const lines=['【ステータス強化】'];
   if((G.permAtkBonus||0)>0) lines.push('⚔️ 常時攻撃力 +'+G.permAtkBonus+'\n全ての攻撃カードに常時加算される');
   if((G.permAtkBuff2||0)>0) lines.push('⚡ 最初の一撃 +'+G.permAtkBuff2+(G.usedFirstAtkBuff2?' (使用済)':'')+'\n各ターン最初の攻撃に加算');
@@ -4629,6 +4637,7 @@ function showStatupDetail(){
 
 
 function showCurseInfo(){
+  if(_isGameLocked())return;
   const t=G.turnCount||1;
   const msg='⏳ 呪縛タイマー\n\n現在: '+t+'ターン目\n\n'
     +'6ターン目の終了時からダメージが発生します。\n'
@@ -5132,6 +5141,7 @@ function showCardDetail(c){
   popup.classList.add('show');
 }
 function showDiscardPile(){
+  if(_isGameLocked())return;
   const dl=document.getElementById('discard-list');dl.innerHTML='';
   const cnt={};G.discard.forEach(id=>cnt[id]=(cnt[id]||0)+1);
   Object.entries(cnt).forEach(([id,n])=>{
@@ -5998,6 +6008,7 @@ bind('btn-close-charge-info',()=>{
 });
 bind('btn-close-discard',()=>{sfxCancel();hideOv('ov-discard');});
 function openChargeInfo(){
+  if(_isGameLocked())return;
   const ct=G.chargeType?CHARGE_TYPES[G.chargeType]:null;
   const el=document.getElementById('charge-info-content');
   const activateBtn=document.getElementById('charge-activate-btn');
@@ -6156,7 +6167,7 @@ function executeChargeEffect(){
 }
 bind('duplicate-skip',()=>{hideOv('ov-duplicate');afterEventNext()});
 bind('altar-skip',()=>{hideOv('ov-altar');startStage();});
-bind('btn-rules-ingame',()=>{ showOv('ov-rules'); });
+bind('btn-rules-ingame',()=>{ if(_isGameLocked())return; showOv('ov-rules'); });
 
 // =============================================
 // 管理者モード
@@ -6366,6 +6377,7 @@ bind('btn-admin-start',()=>{
   showStartScreen(()=>startStage());
 });
 bind('btn-deck-view',()=>{
+  if(_isGameLocked())return;
   const dl=document.getElementById('deck-list');dl.innerHTML='';
   const sa=document.getElementById('deck-stat-area');if(sa)sa.innerHTML='';
 
@@ -6581,6 +6593,7 @@ function startGame(){
 
 // タイトルへ戻るボタン
 bind('btn-to-title',()=>{
+  if(_isGameLocked())return;
   const cb=document.getElementById('confirm-box');
   document.getElementById('cb-title').textContent='タイトルへ戻りますか？（進行データは消えます）';
   document.getElementById('cb-ok').onclick=()=>{
