@@ -5889,21 +5889,7 @@ function _preloadAdImages(list){
 }
 // 起動直後にデフォルト広告をプリロード
 _preloadAdImages(_adsList);
-// ads.jsonがあれば非同期で上書き＆再プリロード
-(()=>{
-  const xhr=new XMLHttpRequest();
-  xhr.open('GET','ads.json',true);
-  xhr.onload=()=>{
-    try{
-      const data=JSON.parse(xhr.responseText);
-      if(Array.isArray(data)&&data.length>0){
-        _adsList=data;
-        _preloadAdImages(_adsList);
-      }
-    }catch(e){}
-  };
-  try{xhr.send();}catch(e){}
-})();
+
 
 // 広告を表示してコールバックを実行
 function showAdThenContinue(onComplete){
