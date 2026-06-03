@@ -53,8 +53,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 /* 敵名＋次の行動バー */
 #enemy-info-bar{display:flex;align-items:center;gap:4px;min-height:22px;flex-shrink:0;}
-#enemy-intent{font-size:9px;color:#ffe44e;font-weight:bold;background:rgba(0,0,0,.7);border:1px solid rgba(255,228,78,.6);border-radius:5px;padding:3px 7px 3px 7px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;touch-action:manipulation;position:relative;}
-#enemy-intent::after{content:'▼';font-size:7px;color:rgba(255,228,78,.5);margin-left:4px;}
+#enemy-intent{font-size:9px;color:#ffe44e;font-weight:bold;background:rgba(0,0,0,.7);border:2px solid rgba(255,228,78,.6);border-radius:5px;padding:3px 7px 3px 7px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;touch-action:manipulation;position:relative;}
+#enemy-intent::after{content:'▼';font-size:7px;color:#e74c3c;margin-left:4px;animation:blink-arrow 1.2s ease-in-out infinite;animation-delay:-0.6s;}
 #enemy-name{font-size:10px;color:#fff;letter-spacing:1px;font-weight:bold;background:rgba(0,0,0,.8);border:1.5px solid rgba(255,255,255,.4);border-radius:5px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
 
 /* 敵エリア */
@@ -74,7 +74,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .tag.weak{background:rgba(230,126,34,.2);color:#eb984e;border:1px solid rgba(230,126,34,.5);}
 
 /* プレイヤー状態テキストボックス（横長・敵エリア下） */
-#player-status-box{background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:3px 8px;font-size:9px;color:#fff;min-height:20px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-family:sans-serif;flex-shrink:0;}
+#player-status-box{background:rgba(0,0,0,.75);border:2px solid rgba(255,255,255,.2);border-radius:6px;padding:3px 8px;font-size:9px;color:#fff;min-height:20px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-family:sans-serif;flex-shrink:0;}
 
 /* ログエリア */
 #log-area{flex-shrink:0;height:72px;overflow-y:auto;background:rgba(0,0,0,.5);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3px 8px;display:flex;flex-direction:column;gap:1px;touch-action:pan-y;-webkit-overflow-scrolling:touch;}
@@ -87,7 +87,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 #hand-area{background:var(--panel);border-top:1px solid rgba(201,168,76,.2);padding:2px 8px 0;flex-shrink:0;}
 #hand-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-shrink:0;}
 .hand-label{font-size:8px;color:var(--gold);letter-spacing:1px;display:inline-flex;align-items:center;gap:3px;}
-#mana-area{background:rgba(0,0,30,.6);border:1.5px solid #3060d0;border-radius:7px;padding:2px 7px;display:flex;align-items:center;gap:3px;}
+#mana-area{background:rgba(0,0,30,.6);border:3px solid #3060d0;border-radius:7px;padding:2px 7px;display:flex;align-items:center;gap:3px;}
 #mana-gems{display:flex;gap:2px;}
 .gem{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);transition:all .25s;}
 .gem.full{background:radial-gradient(circle at 35% 35%,#90b8ff,#1a40d0);border-color:#3060d0;box-shadow:0 0 6px rgba(70,110,255,.7);animation:mana-gem-pulse 2.4s ease-in-out infinite;}
@@ -377,7 +377,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .freepass-cost-blink{color:#f0c040;}
 /* タップ可能ボックス共通 */
 .tap-hint-after::after{content:'▼';font-size:7px;opacity:.5;margin-left:4px;}
-#player-statup-box::after,#player-status-box::after{content:'▼';font-size:7px;color:rgba(255,255,255,.35);margin-left:3px;flex-shrink:0;}
+#player-statup-box::after{content:'▼';font-size:7px;color:#e74c3c;margin-left:3px;flex-shrink:0;animation:blink-arrow 1.2s ease-in-out infinite;animation-delay:-0.6s;}#player-status-box::after{content:'▼';font-size:7px;color:rgba(255,255,255,.35);margin-left:3px;flex-shrink:0;}
 /* タップ時の視覚フィードバック */
 #enemy-intent:active,#player-statup-box:active,#player-status-box:active,#curse-timer-box:active{opacity:.75;}
 /* ステージ背景アニメーション（::beforeで背景のみに適用し、attack-hit等と競合しない） */
@@ -547,6 +547,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   0%,100%{box-shadow:0 0 4px rgba(70,110,255,.5);opacity:1;}
   50%{box-shadow:0 0 12px rgba(100,160,255,1),0 0 20px rgba(70,110,255,.5);opacity:0.7;}
 }
+
+@keyframes blink-arrow {
+  0%,100% { opacity:1; }
+  50% { opacity:0; }
+}
+.blink-arrow {
+  animation: blink-arrow 1.2s ease-in-out infinite;
+  animation-delay: -0.6s;
+}
+
+
+#player-status-box::after{content:'▼';font-size:7px;color:#e74c3c;margin-left:4px;animation:blink-arrow 1.2s ease-in-out infinite;animation-delay:-0.6s;}
+
+#charge-name::after{content:'▼';font-size:9px;color:#e74c3c;margin-left:4px;animation:blink-arrow 1.2s ease-in-out infinite;animation-delay:-0.6s;}
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -665,7 +679,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     </div>
   </div>
   <div id="battlefield">
-    <div style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.5);border-radius:4px;padding:2px 8px;font-size:8px;color:rgba(201,168,76,.9);font-family:sans-serif;text-align:center;letter-spacing:0.3px;font-weight:bold;">▼ のマークがある場所はタップで詳細表示が出ます</div>
+    <div style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.5);border-radius:4px;padding:2px 8px;font-size:8px;color:rgba(201,168,76,.9);font-family:sans-serif;text-align:center;letter-spacing:0.3px;font-weight:bold;"><span style="color:#e74c3c;">▼</span> のマークがある場所はタップで詳細表示が出ます</div>
     <div class="hp-row">
       <div class="hp-name" style="color:#e07878;">ENEMY</div>
       <div class="hp-bg"><div class="hp-bar enemy" id="enemy-hp-bar" style="width:100%"></div></div>
@@ -673,7 +687,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     </div>
     
     <div id="enemy-info-bar">
-      <div id="enemy-intent">---</div>
+      <div id="enemy-intent" style="cursor:pointer;touch-action:manipulation;" onclick="showEnemyIntentDetail && typeof currentEnemyAct!=='undefined' && showEnemyIntentDetail(currentEnemyAct, (STAGES[G.stageIndex]||{}).intentDetail||{}, (STAGES[G.stageIndex]||{}).actions||[])">---</div>
       <div id="enemy-name">---</div>
     </div>
     
@@ -703,27 +717,27 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       <div id="enemy-appear-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.82);border:1px solid rgba(201,168,76,.6);border-radius:8px;z-index:20;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:12px;font-weight:bold;color:#f0d47a;text-align:center;padding:8px 16px;white-space:nowrap;pointer-events:none;"></div>
       <div id="enemy-action-box" style="display:none;position:absolute;bottom:42px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);border:2px solid #e07878;border-radius:8px;z-index:20;font-family:'Cinzel',serif;font-size:11px;font-weight:bold;color:#fff;text-align:center;padding:6px 14px;white-space:nowrap;pointer-events:none;box-shadow:0 0 12px rgba(231,76,60,.4);"></div>
       
-      <div id="card-gauge-box" style="position:absolute;bottom:4px;left:4px;background-color:#0a0a0a;background-image:url(chargebox.png);background-size:70px 60px;background-repeat:no-repeat;background-position:center;border:1.5px solid rgba(201,168,76,.7);border-radius:7px;padding:3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:10;cursor:pointer;touch-action:manipulation;box-shadow:0 0 8px rgba(201,168,76,.2);width:70px;height:60px;overflow:hidden;" onclick="openChargeInfo()" ontouchend="event.preventDefault();openChargeInfo();">
+      <div id="card-gauge-box" style="position:absolute;bottom:4px;left:4px;background-color:#0a0a0a;background-image:url(chargebox.png);background-size:70px 70px;background-repeat:no-repeat;background-position:center;border:1.5px solid rgba(201,168,76,.7);border-radius:7px;padding:3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:10;cursor:pointer;touch-action:manipulation;box-shadow:0 0 8px rgba(201,168,76,.2);width:70px;height:70px;overflow:hidden;" onclick="openChargeInfo()" ontouchend="event.preventDefault();openChargeInfo();">
       <img src="chargebox.png" style="display:none;" onerror="document.getElementById('card-gauge-box').style.backgroundImage='none';">
         <div id="charge-icon-wrap" style="width:20px;height:20px;display:none;align-items:center;justify-content:center;">
           <img id="charge-type-img" style="width:20px;height:20px;object-fit:contain;display:block;" onerror="this.parentNode.style.display='none';document.getElementById('charge-emoji').style.display='block';">
         </div>
         <div id="charge-emoji" style="font-size:14px;line-height:1;display:block;"></div>
-        <div id="charge-name" style="font-family:'Cinzel',serif;font-size:10.5px;font-weight:bold;color:#c9a84c;letter-spacing:1px;">CHARGE ▶</div>
+        <div id="charge-name" style="font-family:'Cinzel',serif;font-size:9px;font-weight:bold;color:#c9a84c;letter-spacing:1px;">CHARGE ▶</div>
         <div id="gauge-lamps" style="display:flex;gap:3px;"></div>
         <div id="charge-status-label" style="height:10px;font-size:9px;font-weight:bold;font-family:'Cinzel',serif;letter-spacing:0.5px;line-height:1;margin-top:1px;text-align:center;"></div>
       </div>
       
-      <div id="curse-timer-box" style="display:none;position:absolute;bottom:4px;right:4px;background-color:rgba(0,0,0,.88);background-image:url(jyubakubox.png);background-size:70px 60px;background-repeat:no-repeat;background-position:center;border:1.5px solid rgba(180,40,40,.8);border-radius:7px;padding:3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;z-index:10;box-shadow:0 0 8px rgba(200,40,40,.3);cursor:pointer;touch-action:manipulation;width:70px;height:60px;overflow:hidden;" onclick="showCurseInfo()" ontouchend="event.preventDefault();showCurseInfo();">
+      <div id="curse-timer-box" style="display:none;position:absolute;bottom:4px;right:4px;background-color:rgba(0,0,0,.88);background-image:url(jyubakubox.png);background-size:70px 70px;background-repeat:no-repeat;background-position:center;border:1.5px solid rgba(180,40,40,.8);border-radius:7px;padding:3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;z-index:10;box-shadow:0 0 8px rgba(200,40,40,.3);cursor:pointer;touch-action:manipulation;width:70px;height:70px;overflow:hidden;" onclick="showCurseInfo()" ontouchend="event.preventDefault();showCurseInfo();">
       <img src="jyubakubox.png" style="display:none;" onerror="document.getElementById('curse-timer-box').style.backgroundImage='none';">
         <div style="font-family:'Cinzel',serif;font-size:9px;font-weight:bold;color:#e74c3c;letter-spacing:0.5px;">⏳ 呪縛</div>
         <div id="curse-timer-count" style="font-family:'Cinzel',serif;font-size:11px;font-weight:bold;color:#fff;line-height:1;">-</div>
         <div id="curse-timer-dmg" style="font-size:9px;font-weight:bold;color:#e07878;font-family:sans-serif;"></div>
-        <div style="font-size:6px;color:rgba(231,76,60,.45);">▼</div>
+        <div class="blink-arrow" style="font-size:6px;color:#e74c3c;">▼</div>
       </div>
     </div><!-- /enemy-area -->
-    <div id="player-statup-box" style="background:rgba(20,10,40,.7);border:1px solid rgba(201,168,76,.5);border-radius:5px;padding:3px 8px;font-size:9px;color:#e0d080;min-height:18px;display:none;align-items:center;flex-wrap:wrap;gap:5px;font-family:sans-serif;cursor:pointer;touch-action:manipulation;margin-bottom:2px;position:relative;" onclick="showStatupDetail()" ontouchend="event.preventDefault();showStatupDetail()"></div>
-    <div id="player-status-box" style="background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 8px;font-size:9px;color:#fff;min-height:20px;display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-family:sans-serif;cursor:pointer;touch-action:manipulation;" onclick="showStatusDetail('player')" ontouchend="event.preventDefault();showStatusDetail('player')"></div>
+    <div style="position:relative;margin-bottom:2px;" onclick="showStatupDetail()" ontouchend="event.preventDefault();showStatupDetail()"><div id="player-statup-box" style="background:rgba(20,10,40,.7);border:2px solid rgba(201,168,76,.5);border-radius:5px;padding:3px 8px;font-size:9px;color:#e0d080;min-height:18px;display:none;align-items:center;flex-wrap:wrap;gap:5px;font-family:sans-serif;cursor:pointer;touch-action:manipulation;"></div></div>
+    <div id="player-status-box" style="background:rgba(0,0,0,.6);border:2px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 8px;font-size:9px;color:#fff;min-height:20px;display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-family:sans-serif;cursor:pointer;touch-action:manipulation;" onclick="showStatusDetail('player')" ontouchend="event.preventDefault();showStatusDetail('player')"></div>
     
     <div class="hp-row">
       <div class="hp-name" style="color:#4ae080;">YOU</div>
@@ -746,19 +760,19 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <div style="background:rgba(0,0,0,.6);border:1.5px solid rgba(100,160,255,.6);border-radius:7px;padding:3px 8px;display:flex;align-items:center;gap:3px;cursor:pointer;touch-action:manipulation;" onclick="showDeckView()">
           <span style="font-size:9px;color:#7dd4f8;letter-spacing:1px;">山札</span>
           <span id="draw-count" style="font-size:13px;font-weight:bold;color:#fff;font-family:'Cinzel',serif;"></span>
-          <span style="font-size:7px;color:rgba(125,212,248,.45);margin-left:1px;">▼</span>
+          <span class="blink-arrow" style="font-size:7px;color:#e74c3c;margin-left:1px;">▼</span>
         </div>
         <div style="background:rgba(0,0,0,.6);border:1.5px solid rgba(150,100,150,.6);border-radius:7px;padding:3px 8px;display:flex;align-items:center;gap:3px;cursor:pointer;touch-action:manipulation;" onclick="showDiscardPile()">
           <span style="font-size:9px;color:#bb88cc;letter-spacing:1px;">捨札</span>
           <span id="discard-count" style="font-size:13px;font-weight:bold;color:#fff;font-family:'Cinzel',serif;"></span>
-          <span style="font-size:7px;color:rgba(187,136,204,.45);margin-left:1px;">▼</span>
+          <span class="blink-arrow" style="font-size:7px;color:#e74c3c;margin-left:1px;">▼</span>
         </div>
         <span id="page-info" style="color:#555;font-size:8px;"></span>
       </div>
-      <div id="mana-area" style="background:rgba(0,0,30,.6);border:1.5px solid #3060d0;border-radius:7px;padding:2px 7px;display:flex;align-items:center;gap:3px;">
+      <div id="mana-area" style="background:rgba(0,0,30,.6);border:3px solid #3060d0;border-radius:7px;padding:2px 7px;display:flex;align-items:center;gap:3px;">
         <img src="ui_mana.png" style="height:10px;display:none;" onerror="this.style.display='none';" id="img-ui-mana">
         <div id="mana-gems"></div>
-        <div id="mana-text">💎<span id="mc">3</span>/<span id="mm">10</span></div>
+        <div id="mana-text"><span id="mc">3</span>/<span id="mm">10</span></div>
       </div>
     </div>
     <div id="hand-nav">
@@ -5502,7 +5516,7 @@ function updateGaugeLamps(){
   // チャージ名・アイコン画像更新
   const nameEl=document.getElementById('charge-name');
   const keepMark=G.holdChargePartial?' 🔒':'';
-  if(nameEl) nameEl.textContent=ct?ct.name+keepMark:'CHARGE';
+  if(nameEl) nameEl.textContent=ct?ct.name+keepMark:'CHARGE ▶';
   // チャージタイプ画像（charge_[id].png）があれば表示、なければ絵文字
   const _imgWrap=document.getElementById('charge-icon-wrap');
   const _typeImg=document.getElementById('charge-type-img');
@@ -6633,33 +6647,34 @@ setTimeout(()=>{
   });
 },300);
 
+function _onTapStart_touch(e){
+  if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
+  if(e.target.id==='btn-tutorial-title'||e.target.closest('#btn-tutorial-title')) return;
+  if(!e.target.closest('#tap-start-zone')) return;
+  e.preventDefault();
+  _unregisterStartListeners();
+  startGame();
+}
+function _onTapStart_click(e){
+  if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
+  if(e.target.id==='btn-tutorial-title'||e.target.closest('#btn-tutorial-title')) return;
+  if(!e.target.closest('#tap-start-zone')) return;
+  _unregisterStartListeners();
+  startGame();
+}
+function _unregisterStartListeners(){
+  logoScreen.removeEventListener('touchend',_onTapStart_touch);
+  logoScreen.removeEventListener('click',_onTapStart_click);
+}
 function _registerStartListeners(){
-  function _tl(e){
-    if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
-    if(!e.target.closest('#tap-start-zone')) return;
-    e.preventDefault();
-    logoScreen.removeEventListener('touchend',_tl);
-    logoScreen.removeEventListener('click',_cl);
-    startGame();
-  }
-  function _cl(e){
-    if(e.target.id==='btn-rules-title'||e.target.closest('#btn-rules-title')) return;
-    if(!e.target.closest('#tap-start-zone')) return;
-    logoScreen.removeEventListener('touchend',_tl);
-    logoScreen.removeEventListener('click',_cl);
-    startGame();
-  }
-  logoScreen.addEventListener('touchend',_tl);
-  logoScreen.addEventListener('click',_cl);
+  _unregisterStartListeners();
+  logoScreen.addEventListener('touchend',_onTapStart_touch);
+  logoScreen.addEventListener('click',_onTapStart_click);
 }
 
 _registerStartListeners();
 // tap-start-zone専用イベント（直接タップ用）
-const tapStartZone=document.getElementById('tap-start-zone');
-if(tapStartZone){
-  tapStartZone.addEventListener('click',e=>{e.stopPropagation();},{once:true});
-  tapStartZone.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();},{once:true});
-}
+// tap-start-zone: イベントはlogoScreen側で処理
 
 // チャージ選択の戻るボタン（タイトル画面に戻る）
 const chargeBackBtn=document.getElementById('btn-charge-back');
@@ -6669,7 +6684,7 @@ if(chargeBackBtn){
     hideOv('ov-charge-select');
     // タイトル画面（logo-screen）を表示
     const ls=document.getElementById('logo-screen');
-    if(ls){ls.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>{ls.style.opacity='1';}));}
+    if(ls){ls.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>{ls.style.opacity='1';_registerStartListeners();}));}
     playBgm('op.mp3');
   };
   chargeBackBtn.addEventListener('click',doChargeBack);
