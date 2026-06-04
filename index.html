@@ -194,7 +194,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .card-icon-wrap img{width:100%;height:100%;object-fit:contain;border-radius:50%;display:block;}
 
 /* カード名 */
-.card-name{font-size:7px;color:var(--text);letter-spacing:.3px;margin-top:1px;font-family:'Cinzel',serif;}
+.card-name{font-size:14px;font-weight:bold;color:var(--text);letter-spacing:.3px;margin-top:1px;font-family:'Cinzel',serif;}
 
 /* 区切り線 */
 .card-divider{height:1px;margin:1px 4px;}
@@ -205,7 +205,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .card.legendary .card-divider{background:linear-gradient(90deg,transparent,rgba(255,149,0,.5),transparent);}
 
 /* 効果テキスト */
-.card-desc{font-size:6px;color:#c8c0b0;font-style:normal;line-height:1.4;font-family:sans-serif;padding:0 2px;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;}
+.card-desc{font-size:12px;color:#c8c0b0;font-style:normal;line-height:1.4;font-family:sans-serif;padding:0 2px;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;}
 
 /* レアリティ表記 */
 .rarity-dot{display:none;}
@@ -609,7 +609,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     background:rgba(100,160,255,.15);border:2px solid rgba(100,160,255,.7);border-radius:10px;
     padding:10px 28px;font-family:'Cinzel',serif;font-size:12px;color:#7dd4f8;
     cursor:pointer;touch-action:manipulation;letter-spacing:2px;
-    box-shadow:0 0 16px rgba(100,160,255,.25);white-space:nowrap;">📖 チュートリアル</div>
+    box-shadow:0 0 16px rgba(100,160,255,.25);white-space:nowrap;">📖 説明書</div>
 </div>
 
 <div class="overlay" id="ov-admin" style="gap:8px;padding:12px 10px;z-index:2100;">
@@ -3596,9 +3596,9 @@ function showSmithConfirm(origId, origC, upg){
           <div class="card-type-label card-type-${c.type}">${{attack:'攻',shield:'防',heal:'回',skill:'技',curse:'呪'}[c.type]||''}</div>
           <div class="card-cost ${c.rarity}">${c.cost}</div>
           ${cardIconHtml(c)}
-          <div class="card-name" style="font-size:8px;">${c.name}</div>
+          <div class="card-name" style="font-size:16px;">${c.name}</div>
           <div class="card-divider"></div>
-          <div class="card-desc" style="font-size:7px;">${desc.slice(0,22)+(desc.length>22?'…':'')}</div>
+          <div class="card-desc" style="font-size:14px;">${desc.slice(0,22)+(desc.length>22?'…':'')}</div>
         </div>
         <div class="card-corner tl">${corner}</div>
         <div class="card-corner br">${corner}</div>
@@ -4293,7 +4293,7 @@ function updateUI(){
     if((G.healBuff||0)>0) supParts.push('<span style="color:#ff8fa0;">💗回復+'+G.healBuff+'</span>');
     if((G.shieldBuff||0)>0) supParts.push('<span style="color:#7dd4f8;">盾+'+G.shieldBuff+'</span>');
     if(G.turnStartHealPct>0) supParts.push('<span style="color:#52be80;">💚T+'+G.turnStartHealPct+'%</span>');
-    if(G.gotManaPlus||G.gotManaPlus2) supParts.push('<span style="color:#7dd4f8;">💎マナ'+G.manaRegen+'</span>');
+    if(G.gotManaPlus||G.gotManaPlus2){const _mr=(G.manaRegen||3)-3;supParts.push('<span style="color:#7dd4f8;">マナ+'+_mr+'</span>');}
     if(G.firstTurnManaBonus>0) supParts.push('<span style="color:#7dd4f8;">💎初T+'+G.firstTurnManaBonus+'</span>');
     if((G.drawBonusPerTurn||0)>0) supParts.push('<span style="color:#a8d8ea;">🃏ドロー+'+G.drawBonusPerTurn+'</span>');
     if((G.initHandBonus||0)>0) supParts.push('<span style="color:#a8d8ea;">🃏手札+'+G.initHandBonus+'</span>');
@@ -4613,7 +4613,7 @@ function showStatupDetail(){
   if((G.healBuff||0)>0) lines.push('💗 回復強化 +'+G.healBuff+'\n回復カードの回復量に加算される');
   if((G.shieldBuff||0)>0) lines.push('🛡️ 盾強化 +'+G.shieldBuff+'\n盾カードのシールド量に加算される');
   if(G.turnStartHealPct>0) lines.push('💚 ターン開始回復 '+G.turnStartHealPct+'%\n毎ターン開始時に最大HPの'+G.turnStartHealPct+'%回復');
-  if(G.gotManaPlus||G.gotManaPlus2) lines.push('💎 全ターンマナ '+G.manaRegen+'\n毎ターン開始時のマナ回復量');
+  if(G.gotManaPlus||G.gotManaPlus2){const _mr=(G.manaRegen||3)-3;lines.push('💎 全ターンマナ +'+_mr+'\n毎ターン開始時のマナ回復量（基本3+'+_mr+'）');}
   if((G.drawBonusPerTurn||0)>0) lines.push('🃏 全ターンドロー +'+G.drawBonusPerTurn+'\n毎ターンのドロー枚数に加算');
   if((G.initHandBonus||0)>0) lines.push('🃏 初期手札 +'+G.initHandBonus+'\nステージ開始時の手札枚数に加算');
   if(G.firstTurnManaBonus>0) lines.push('💎 初ターンマナ +'+G.firstTurnManaBonus+'\n初ターン開始時のマナに加算');
@@ -5053,9 +5053,9 @@ function showCardUsePopup(c,idx,canUse){
       '<div class="card-type-label card-type-'+c.type+'" style="width:32px;height:32px;font-size:16px;top:6px;right:4px;">'+({attack:'攻',shield:'防',heal:'回',skill:'技',curse:'呪',bougai:'妨'}[c.type]||'')+'</div>'+
       '<div class="card-cost '+c.rarity+'" style="width:32px;height:32px;font-size:18px;top:6px;left:4px;">'+c.cost+'</div>'+
       iconHtml+
-      '<div class="card-name" style="font-size:11px;margin-top:4px;">'+c.name+'</div>'+
+      '<div class="card-name" style="font-size:22px;margin-top:4px;">'+c.name+'</div>'+
       '<div class="card-divider"></div>'+
-      '<div class="card-desc" style="font-size:8px;line-height:1.6;padding:0 14px;white-space:normal;word-break:break-all;">'+c.desc+'</div>'+
+      '<div class="card-desc" style="font-size:16px;line-height:1.6;padding:0 14px;white-space:normal;word-break:break-all;">'+c.desc+'</div>'+
       '<div style="margin:5px auto 3px;width:fit-content;background:#000;border:1.5px solid #fff;border-radius:5px;padding:2px 8px;"><span class="rarity-dot '+c.rarity+'" style="display:inline;font-size:8px;">'+(RL[c.rarity]||c.rarity)+'</span></div>'+
     '</div>'+
     '<div class="card-corner tl">'+corner+'</div>'+
@@ -5127,9 +5127,9 @@ function showCardDetail(c){
       '<div class="card-type-label card-type-'+c.type+'" style="width:32px;height:32px;font-size:16px;top:6px;right:4px;">'+({attack:'攻',shield:'防',heal:'回',skill:'技',curse:'呪',bougai:'妨'}[c.type]||'')+'</div>'+
       '<div class="card-cost '+c.rarity+'" style="width:32px;height:32px;font-size:18px;top:6px;left:4px;">'+c.cost+'</div>'+
       iconHtml+
-      '<div class="card-name" style="font-size:11px;margin-top:4px;">'+c.name+'</div>'+
+      '<div class="card-name" style="font-size:22px;margin-top:4px;">'+c.name+'</div>'+
       '<div class="card-divider"></div>'+
-      '<div class="card-desc" style="font-size:8px;line-height:1.6;padding:0 14px;white-space:normal;word-break:break-all;">'+c.desc+'</div>'+
+      '<div class="card-desc" style="font-size:16px;line-height:1.6;padding:0 14px;white-space:normal;word-break:break-all;">'+c.desc+'</div>'+
       '<div style="margin:5px auto 3px;width:fit-content;background:#000;border:1.5px solid #fff;border-radius:5px;padding:2px 8px;"><span class="rarity-dot '+c.rarity+'" style="display:inline;font-size:8px;">'+(RL[c.rarity]||c.rarity)+'</span></div>'+
     '</div>'+
     '<div class="card-corner tl">'+corner+'</div>'+
@@ -6941,7 +6941,7 @@ setTimeout(initUiImages,200);
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px;">
-    <div class="ov-btn" id="btn-rules-to-tutorial" style="background:rgba(100,160,255,.1);border-color:rgba(100,160,255,.6);color:#7dd4f8;" onclick="hideOv('ov-rules');startTutorial(true);" ontouchend="event.preventDefault();hideOv('ov-rules');startTutorial(true);">📖 チュートリアルを見る</div>
+    <div class="ov-btn" id="btn-rules-to-tutorial" style="background:rgba(100,160,255,.1);border-color:rgba(100,160,255,.6);color:#7dd4f8;" onclick="hideOv('ov-rules');startTutorial(true);" ontouchend="event.preventDefault();hideOv('ov-rules');startTutorial(true);">📖 説明書を見る</div>
     <div class="ov-btn" id="btn-close-rules" onclick="document.getElementById('ov-rules').classList.remove('show')" ontouchend="event.preventDefault();document.getElementById('ov-rules').classList.remove('show')">閉じる</div>
   </div>
 </div>
